@@ -1,42 +1,37 @@
-﻿#include <iostream>
-#pragma once
+#include <iostream>
 #pragma warning (disable:4996)
 using namespace std;
-
 enum class gender { male, female };
 class Person
 {
 private:
-	const int _ID;
-	char* aname;
+	const int ID;
+	char* aName;
 	gender aGender;
 	Person* aMother;
 	Person* aFather;
-	//void erase();
-	static int _nextID;
+	static int aID;
 public:
 	int getID() const;
 	char* getName() const;
 	Person(const char*, gender, Person* = nullptr, Person* = nullptr);
 	Person* giveBirth(const char*, gender, Person* = nullptr);
-	//Person();
 	void print();
 	char* getMother() const;
 	char* getFather() const;
 	const char* getGender() const;
-	//Person operator = (const Person);
 };
-int Person::_nextID = 0;
-Person::Person(const char* name, gender gend, Person* mother, Person* father) :_ID(++_nextID) {
-	aname = new char[strlen(name) + 1];
-	strcpy(aname, name);
+int Person::aID = 0;
+Person::Person(const char* name, gender gender, Person* mother, Person* father) :ID(++aID) {
+	aName = new char[strlen(name) + 1];
+	strcpy(aName, name);
 	if (name == nullptr) {
 		throw logic_error("person should have a name");
 	}
-	aGender = gend;
+	aGender = gender;
 	aMother = mother;
 	aFather = father;
-	if (_ID > 2 && mother == nullptr) {
+	if (ID > 2 && mother == nullptr) {
 		throw logic_error("one of the parents must be mother");
 	}
 	if (mother != nullptr && mother->aGender == gender::male) {
@@ -50,10 +45,10 @@ const char* Person::getGender() const {
 	return this->aGender == gender::male ? "male" : "female";
 }
 char* Person::getName() const {
-	return aname;
+	return aName;
 }
 int Person::getID() const {
-	return _ID;
+	return ID;
 }
 char* Person::getMother() const {
 	return aMother->getName();
@@ -82,24 +77,24 @@ void Person::print() {
 }
 
 Person* Person::giveBirth(const char* name, gender gend, Person* father) {
-	const char* addname = "";
+	const char* enterName = "";
 	if (name != nullptr) {
-		addname = name;
+		enterName = name;
 	}
 	else {
 		throw logic_error("baby should have a name");
 	}
-	auto child = new Person(addname, gend, this, father);
-	return child;
+	auto baby = new Person(enterName, gend, this, father);
+	return baby;
 }
 
 int main() {
 	Person Adam("Adam", gender::male);
 	Person Eva("Eva", gender::female);
 	Person Masha = *Eva.giveBirth("Masha", gender::female, &Adam);
-	Person Artem = *Eva.giveBirth("Ivan", gender::male, &Adam);
-	Person Oxana = *Masha.giveBirth("Anya", gender::female, &Artem);
-	Person Bogdan = *Oxana.giveBirth("Jenya", gender::male);
+	Person Artem = *Eva.giveBirth("Artem", gender::male, &Adam);
+	Person Oxana = *Masha.giveBirth("Oxana", gender::female, &Artem);
+	Person Bogdan = *Oxana.giveBirth("Bogdan", gender::male);
 	Adam.print();
 	cout << endl;
 	Eva.print();
@@ -111,6 +106,6 @@ int main() {
 	Oxana.print();
 	cout << endl;
 	Bogdan.print();
-	system("PAUSE");
+	cout << endl;
 	return 0;
 }
