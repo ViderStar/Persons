@@ -1,7 +1,10 @@
 #include <iostream>
 #pragma warning (disable:4996)
 using namespace std;
-enum class gender { male, female };
+enum class gender { 
+	M, 
+	FM 
+};
 class Person
 {
 private:
@@ -34,15 +37,15 @@ Person::Person(const char* name, gender gender, Person* mother, Person* father) 
 	if (ID > 2 && mother == nullptr) {
 		throw logic_error("one of the parents must be mother");
 	}
-	if (mother != nullptr && mother->aGender == gender::male) {
+	if (mother != nullptr && mother->aGender == gender::M) {
 		throw logic_error("mother must be female");
 	}
-	if (father != nullptr && father->aGender == gender::female) {
+	if (father != nullptr && father->aGender == gender::FM) {
 		throw logic_error("father must be male");
 	}
 }
 const char* Person::getGender() const {
-	return this->aGender == gender::male ? "male" : "female";
+	return this->aGender == gender::M ? "male" : "female";
 }
 char* Person::getName() const {
 	return aName;
@@ -58,17 +61,17 @@ char* Person::getFather() const {
 }
 
 void Person::print() {
-	cout << "person's name: " << getName() << endl;
-	cout << "person's ID: " << getID() << endl;
-	cout << "person's gender: " << getGender() << endl;
+	cout << "name: " << getName() << endl;
+	cout << "ID: " << getID() << endl;
+	cout << "gender: " << getGender() << endl;
 	if (aMother != nullptr) {
-		cout << "person's mother name: " << getMother() << endl;
+		cout << "mother name: " << getMother() << endl;
 	}
 	else {
 		cout << "no mother for this person" << endl;
 	}
 	if (aFather != nullptr) {
-		cout << "person's father name: " << getFather() << endl;
+		cout << "father name: " << getFather() << endl;
 	}
 	else {
 		cout << "no father for this person" << endl;
@@ -89,23 +92,17 @@ Person* Person::giveBirth(const char* name, gender gend, Person* father) {
 }
 
 int main() {
-	Person Adam("Adam", gender::male);
-	Person Eva("Eva", gender::female);
-	Person Masha = *Eva.giveBirth("Masha", gender::female, &Adam);
-	Person Artem = *Eva.giveBirth("Artem", gender::male, &Adam);
-	Person Oxana = *Masha.giveBirth("Oxana", gender::female, &Artem);
-	Person Bogdan = *Oxana.giveBirth("Bogdan", gender::male);
-	Adam.print();
-	cout << endl;
-	Eva.print();
-	cout << endl;
-	Masha.print();
-	cout << endl;
-	Artem.print();
-	cout << endl;
-	Oxana.print();
-	cout << endl;
-	Bogdan.print();
-	cout << endl;
+	Person Adam("Adam", gender::M);
+	Person Eva("Eva", gender::FM);
+	Person Svetlana = *Eva.giveBirth("Svetlana", gender::FM, &Adam);
+	Person Artem = *Eva.giveBirth("Artem", gender::M, &Adam);
+	Person Oxana = *Svetlana.giveBirth("Oxana", gender::FM, &Artem);
+	Person Bogdan = *Oxana.giveBirth("Bogdan", gender::M);
+	Adam.print(); cout << '\n';
+	Eva.print(); cout << '\n';
+	Svetlana.print(); cout << '\n';
+	Artem.print(); cout << '\n';
+	Oxana.print(); cout << '\n';
+	Bogdan.print(); cout << '\n';
 	return 0;
 }
